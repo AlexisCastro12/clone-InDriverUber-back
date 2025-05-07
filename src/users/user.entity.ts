@@ -5,11 +5,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import * as argon2 from 'argon2';
 import { Rol } from 'src/roles/rol.entity';
+import { DriversPosition } from 'src/drivers_position/drivers_position.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -58,6 +60,12 @@ export class User {
   }) //Tabla padre o prioridad, Los usuarios siempre tendran roles, en logica, hasta que existe un usuario los roles son utiles
   @ManyToMany(() => Rol, (rol) => rol.users)
   roles: Rol[];
+
+  @OneToMany(
+    () => DriversPosition,
+    (driversPosition) => driversPosition.id_driver,
+  )
+  driversPosition: DriversPosition;
 
   @BeforeInsert()
   async hashPassword() {

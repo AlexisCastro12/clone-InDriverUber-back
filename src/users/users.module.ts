@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { JwtStrategy } from 'src/auth/jwt/jwt.strategy';
 import { Rol } from 'src/roles/rol.entity';
+import { DriversPosition } from 'src/drivers_position/drivers_position.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Rol])],
+  imports: [TypeOrmModule.forFeature([User, Rol, DriversPosition])],
   providers: [UsersService, JwtStrategy],
   controllers: [UsersController],
 })

@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DriversPositionModule } from './drivers_position/drivers_position.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UsersModule,
     AuthModule,
     RolesModule,
+    DriversPositionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
