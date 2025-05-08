@@ -28,4 +28,20 @@ export class DriversPositionService {
       return false;
     }
   }
+
+  async getNearbyDrivers(client_lat: number, client_lng: number) {
+    const driversPosition = await this.driversPositionRepository.query(`
+      SELECT
+        id_driver,
+        ST_Y(location::geometry) AS locationlat,
+        ST_X(location::geometry) AS locationlng,
+        ST_Distance(location::geography, ST_GeogFromText('SRID=4326; POINT(${client_lng} ${client_lat})')) AS distance
+      FROM
+        udemy_delivery.drivers_position
+      WHERE ST_DWithin(location::geography, ST_GeogFromText('SRID=4326; POINT(${client_lng} ${client_lat})') , 500)
+      ORDER BY
+        distance ASC;
+      `);
+    return driversPosition;
+  }
 }
