@@ -44,4 +44,8 @@ export class DriversPositionService {
       `);
     return driversPosition;
   }
+
+  async delete(id_driver: number) {
+    return this.driversPositionRepository.delete(id_driver);
+  }
 }

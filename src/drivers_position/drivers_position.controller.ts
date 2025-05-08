@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseFloatPipe,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { DriversPositionService } from './drivers_position.service';
 import { createDriverPositionDto } from './dto/create_driver_position.dto';
 
@@ -13,9 +22,14 @@ export class DriversPositionController {
 
   @Get(':client_lat/:client_lng')
   getNearbyDrivers(
-    @Param('client_lat') client_lat: number,
-    @Param('client_lng') client_lng: number,
+    @Param('client_lat', ParseFloatPipe) client_lat: number,
+    @Param('client_lng', ParseFloatPipe) client_lng: number,
   ) {
     return this.driversPositionService.getNearbyDrivers(client_lat, client_lng);
+  }
+
+  @Delete(':id_driver')
+  delete(@Param('id_driver', ParseIntPipe) id_driver: number) {
+    return this.driversPositionService.delete(id_driver);
   }
 }
