@@ -18,7 +18,6 @@ export class RegisterAuthDto {
   lastname: string;
 
   @IsNotEmpty()
-  @IsString()
   @IsEmail()
   email: string;
 

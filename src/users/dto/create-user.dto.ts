@@ -16,7 +16,6 @@ export class CreateUserDto {
   lastname: string;
 
   @IsNotEmpty()
-  @IsString()
   @IsEmail()
   email: string;
 
@@ -29,12 +28,10 @@ export class CreateUserDto {
   @MinLength(6)
   password: string;
 
-  @IsNotEmpty()
   @IsString()
   @IsOptional()
   image?: string;
 
-  @IsNotEmpty()
   @IsString()
   @IsOptional()
   notification_token?: string;
