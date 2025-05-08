@@ -14,14 +14,34 @@ export class DriversPositionService {
   async create(driverPosition: createDriverPositionDto) {
     try {
       //Se accede a la tabla mediante el schema udemy_delivery.drivers_position, esto puede cambiar en produccion
-      await this.driversPositionRepository.query(`
-        INSERT INTO
-          udemy_delivery.drivers_position(id_driver, location)
-        VALUES(
-        ${driverPosition.id_driver},
-        ST_GeogFromText('SRID=4326;POINT(${driverPosition.lng} ${driverPosition.lat})')
-        )
+      const data: any[] = await this.driversPositionRepository.query(`
+        SELECT
+          *
+        FROM
+          udemy_delivery.drivers_position
+        WHERE
+          id_driver = ${driverPosition.id_driver}
         `);
+      //Se tipó data con any[] para que al aplicarle .length no marque error de sintaxis
+      if (data.length <= 0) {
+        await this.driversPositionRepository.query(`
+            INSERT INTO
+              udemy_delivery.drivers_position(id_driver, location)
+            VALUES(
+            ${driverPosition.id_driver},
+            ST_GeogFromText('SRID=4326;POINT(${driverPosition.lng} ${driverPosition.lat})')
+            )
+            `);
+      } else {
+        await this.driversPositionRepository.query(`
+          UPDATE
+            udemy_delivery.drivers_position
+          SET
+            location = ST_GeogFromText('SRID=4326;POINT(${driverPosition.lng} ${driverPosition.lat})')
+          WHERE
+          id_driver = ${driverPosition.id_driver}
+          `);
+      }
       return true;
     } catch (error) {
       console.log('Error al registrar la ubicacion del conductor:\n', error);
