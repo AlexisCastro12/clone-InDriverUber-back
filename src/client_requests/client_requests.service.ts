@@ -1,15 +1,15 @@
-import {
-  Client,
-  DistanceMatrixResponseData,
-  TravelMode,
-} from '@googlemaps/google-maps-services-js';
+import { Client, TravelMode } from '@googlemaps/google-maps-services-js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { TimeAndDistanceValuesService } from 'src/time_and_distance_values/time_and_distance_values.service';
 
 @Injectable()
 export class ClientRequestsService extends Client {
   private readonly API_KEY: string | undefined; //Declaramos la variable de entorno API_KEY
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private timeAndDistanceValues: TimeAndDistanceValuesService,
+  ) {
     super();
     this.API_KEY = configService.get<string>('GOOGLE_SERVICES_API_KEY');
     // Verifica si la API_KEY está definida
@@ -25,7 +25,11 @@ export class ClientRequestsService extends Client {
     origin_lng: number,
     destination_lat: number,
     destination_lng: number,
-  ): Promise<DistanceMatrixResponseData> {
+  ) {
+    const values = await this.timeAndDistanceValues.find();
+    console.log('-------VALORES-------\n', values);
+    const km_value = values!.km_value;
+    const min_value = values!.min_value;
     const googleResponse = await this.distancematrix({
       params: {
         mode: TravelMode.driving,
@@ -44,6 +48,23 @@ export class ClientRequestsService extends Client {
         ],
       },
     });
-    return googleResponse.data;
+    const recommendedValue =
+      km_value *
+        (googleResponse.data.rows[0].elements[0].distance.value / 1000) +
+      min_value * (googleResponse.data.rows[0].elements[0].duration.value / 60);
+
+    return {
+      recommended_value: recommendedValue,
+      destination_addresses: googleResponse.data.destination_addresses[0],
+      origin_addresses: googleResponse.data.origin_addresses[0],
+      distance: {
+        text: googleResponse.data.rows[0].elements[0].distance.text,
+        value: googleResponse.data.rows[0].elements[0].distance.value / 1000,
+      },
+      duration: {
+        text: googleResponse.data.rows[0].elements[0].duration.text,
+        value: googleResponse.data.rows[0].elements[0].duration.value / 60,
+      },
+    };
   }
 }

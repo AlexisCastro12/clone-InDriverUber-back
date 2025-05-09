@@ -8,6 +8,7 @@ import { RolesModule } from './roles/roles.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DriversPositionModule } from './drivers_position/drivers_position.module';
 import { ClientRequestsModule } from './client_requests/client_requests.module';
+import { TimeAndDistanceValuesModule } from './time_and_distance_values/time_and_distance_values.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ClientRequestsModule } from './client_requests/client_requests.module';
     RolesModule,
     DriversPositionModule,
     ClientRequestsModule,
+    TimeAndDistanceValuesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
