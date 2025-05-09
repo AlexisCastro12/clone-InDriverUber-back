@@ -3,7 +3,7 @@ import { format } from 'util';
 import { config } from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
 
-config();
+config(); // carga las variables de entorno (Archivo .env)
 
 const storage = new Storage({
   projectId: process.env.FIREBASE_PROJECT_ID,

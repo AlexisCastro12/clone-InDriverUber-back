@@ -18,9 +18,7 @@ export class DriversPositionService {
       //Se accede a la tabla mediante el schema udemy_delivery.drivers_position, esto puede cambiar en produccion
       const data: any[] = await this.driversPositionRepository.query(
         `
-        SELECT
-          *
-        FROM
+        SELECT * FROM
           udemy_delivery.drivers_position
         WHERE
           id_driver = $1
