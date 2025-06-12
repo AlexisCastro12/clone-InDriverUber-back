@@ -1,10 +1,21 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  // UseGuards,
+} from '@nestjs/common';
 import { ClientRequestsService } from './client_requests.service';
+// import { HasRoles } from 'src/auth/jwt/has-roles';
+// import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+// import { JwtRolesGuard } from 'src/auth/jwt/jwt-roles.guard';
+// import { JwtRole } from 'src/auth/jwt/jwt-role';
 
 @Controller('client-requests')
 export class ClientRequestsController {
   constructor(private clientRequestsService: ClientRequestsService) {}
 
+  // @HasRoles(JwtRole.CLIENT)
+  // @UseGuards(JwtAuthGuard, JwtRolesGuard)
   @Get(':origin_lat/:origin_lng/:destination_lat/:destination_lng')
   getTimeAndDistanceClientRequest(
     @Param('origin_lat') origin_lat: number,
