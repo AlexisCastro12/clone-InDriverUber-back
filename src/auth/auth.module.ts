@@ -10,7 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule,
+    // ConfigModule, //ya no se necesita porque ya se configuro globalmente en appModule
     TypeOrmModule.forFeature([User, Rol]),
     JwtModule.registerAsync({
       imports: [ConfigModule], // importa ConfigModule aquí también
